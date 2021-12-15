@@ -1,84 +1,84 @@
-// ==UserScript==
-// @name         book my show
-// @namespace    http://tampermonkey.net/
-// @version      0.3
-// @description  play music when tickets are available
-// @author       preetam
-// @match        https://in.bookmyshow.com/buytickets/*
-// @grant        none
-// ==/UserScript==
+const dateToCheck = "17";
+const reloadInterval = 5 * 60;
+const theatres = {
+  "Sivakrishna Cinemas A/C 2K DTS: Kondapalli": 1,
+  "Tara Screens 2K A/C, Payakapuram: Vijayawada": 2,
+  "INOX: LEPL Icon, Patamata": 3,
+};
 
-//date = simply the day,
-//interval = number of min b/w each check (in sec, default = 5min),
-//theatres = names of the theatre (should be exact and the numbers can be anything.)
-//date and interval are required fields, theatres is optional and can be left empty so that sound will be played even if one theatre is present for that movie.
-var date = "19", interval = 5*60;
-var theatres = {};
-theatres['1, Newfangled Miniplex: Mondeal Retail Park'] = 1;
-var audioLink = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-// window.onload = readDocument;
+const foundAudio =
+  "https://codeskulptor-demos.commondatastorage.googleapis.com/descent/gotitem.mp3";
 
-(function() {
-    'use strict';
-    readDocument();
-  	
-})();
+readHTML();
 
+function readHTML() {
+  const today = new Date();
+  console.log(
+    `checked for updates on: ${today.getHours()}:${today.getMinutes()}`
+  );
 
-function readDocument() {
-  	var today = new Date();
-  	console.log("checked on:" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds());
-    var x = document.getElementsByClassName("dates-wrapper");
-    var curDate = today.getDate();
-    if (curDate > date) {
-        window.alert("Sorry to break this to you but we cant go back in time\n. Your ship has already sailed");
-        return;
+  const dateWrapper = document.getElementsByClassName("dates-wrapper");
+  const currentDate = today.getDate();
+  if (currentDate > dateToCheck) {
+    alert(
+      "You can't check for past dates \n Check only on today's date or upcoming dates!"
+    );
+    return;
+  } else {
+    console.log(`Checking for ticket bookings on ${dateToCheck}`);
+  }
+
+  const datesAvailable = dateWrapper[0].getElementsByClassName("date-numeric");
+  let dateFound;
+  for (let date of datesAvailable) {
+    if (date.innerText.trim() === dateToCheck) {
+      dateFound = true;
+      console.log(
+        "Tickets are available on your selected date! - ",
+        date.innerText.trim()
+      );
     }
-  	
-	var datesAvailable = x[0].getElementsByClassName("date-numeric");
-	var found = false;
-	for (let i = 0; i < datesAvailable.length; i++) {
-		var currDate = datesAvailable[i].innerHTML.trim();
-		if (currDate === date) {
-			found = true;
-		}
-	}
+  }
 
-	if (found){
+  if (dateFound === true) {
     if (Object.keys(theatres).length === 0) {
-    	playSound();
-      	return;
+      console.log("You are not searching for any theatres!");
+      successAudio();
+      return;
+    } else {
+      let availableTheatresHTML =
+        document.getElementsByClassName("__venue-name");
+
+      let openTheatres = [];
+      for (let i = 0; i < availableTheatresHTML.length; i++) {
+        openTheatres.push(availableTheatresHTML[i].text);
+      }
+      searchForTheatre(openTheatres);
     }
-		var availableTheatresList = document.getElementsByClassName("__venue-name");
-		searchForTheatre(availableTheatresList);
-	} else {
-		console.log("Either bookings for your movie is't open yet or this movie is not gonna be there till then.");
-        stateChange(-1);
-	}
+  }
 }
 
-function playSound() {
-  	console.log("playing the song");
-    var audio = new Audio(audioLink);
-    audio.play();
+function successAudio() {
+  let audioSuccess = new Audio(foundAudio);
+  audioSuccess.volume = 1;
+  console.log(`playing audio at ${audioSuccess.volume} volume`);
+  audioSuccess.play();
 }
 
-function searchForTheatre(availableTheatresList) {
-    console.log("what we have: " + availableTheatresList.length);
-    console.log("what we want: " + theatres);
-  	for (let i = 0; i < availableTheatresList.length; i++) {
-    		if (theatres.hasOwnProperty(availableTheatresList[i].text.trim())) {
-            console.log("we found it! " + availableTheatresList[i]);
-            playSound();
-        }
+function searchForTheatre(openTheatres) {
+  console.log(`Number of theatres available : ${openTheatres.length}`);
+  console.log("Theatres you are looking for : ", theatres);
+
+  for (key in theatres) {
+    if (openTheatres.includes(key)) {
+      alert(`One of your theatres - ${key} is now open for booking!`);
+    } else {
+      alert(`Booking is not open for ${key} yet!`);
     }
-  	stateChange(-1);
+  }
+  successAudio();
 }
 
-function stateChange(newState) {
-    setTimeout(function () {
-        if (newState == -1) {
-            location.reload(true);
-        }
-    }, 1000 * interval);
-}
+setInterval(() => {
+  location.reload(true);
+}, 1000 * reloadInterval);
