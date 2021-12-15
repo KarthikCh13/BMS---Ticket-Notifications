@@ -16,4 +16,4 @@ In the very first lines, the date, theatre, interval and the audio link should b
 - Autoplay should be enabled in the bookmyshow website before using this.
 - The browser tab should be left open for this extension to work.
 
-#### Note: This script was tested on Edge Version 96.0.1054.57 (64-bit) and 
+#### Note: This script was tested on Edge V-96.0.1054.57 and Brave V-1.32.115 (Chromium: 96.0.4664.93) (64-bit)
