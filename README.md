@@ -7,7 +7,7 @@ Else it will try to reload the page/play the music according to the inputs.<br /
 ### How to use it?
 In the very first lines, the date, theatre, interval and the audio link should be updated according to the use case.
 1) Date: a required field, indicates the date for which the movie tickets should be checked for.
-2) Theatre: an optional field (i.e. can be simple quotes) indicating the theatre to be checked for.
+2) Theatre: You need to enter the theatres you are looking for here, in the same format you see in the javascript file. You can enter as many as you want
 3) Interval: a required field, indicates the time period (in sec) between consecutive page reloads.
 4) Audio link: also required field, indicates the audio file to be played when the tickets are available for the given date and theatre.
 
@@ -16,4 +16,4 @@ In the very first lines, the date, theatre, interval and the audio link should b
 - Autoplay should be enabled in the bookmyshow website before using this.
 - The browser tab should be left open for this extension to work.
 
-#### Note: This script was tested on Firefox 91.1.0esr (64-bit) (grease monkey 4.11 Release)
+#### Note: This script was tested on Edge Version 96.0.1054.57 (64-bit) and 

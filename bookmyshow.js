@@ -1,9 +1,12 @@
 const dateToCheck = "17";
 const reloadInterval = 5 * 60;
 const theatres = {
-  "Sivakrishna Cinemas A/C 2K DTS: Kondapalli": 1,
-  "Tara Screens 2K A/C, Payakapuram: Vijayawada": 2,
+  "Cinepolis: PVP Square Mall, Vijayawada": 1,
+  "INOX: Urvasi Complex, Gandhi Nagar": 2,
   "INOX: LEPL Icon, Patamata": 3,
+  "PVR: Ripples, Vijaywada": 4,
+  "G3 Raj Yuvraj (4K Dolby Atmos): Vijayawada": 5,
+  "Sailaja Theatre: Vijayawada": 6,
 };
 
 const foundAudio =
@@ -69,14 +72,14 @@ function searchForTheatre(openTheatres) {
   console.log(`Number of theatres available : ${openTheatres.length}`);
   console.log("Theatres you are looking for : ", theatres);
 
-  for (key in theatres) {
+  for (let key in theatres) {
     if (openTheatres.includes(key)) {
-      alert(`One of your theatres - ${key} is now open for booking!`);
+      alert(`Ones of your theatres - ${key} is NOW OPEN for booking!`);
+      successAudio();
     } else {
-      alert(`Booking is not open for ${key} yet!`);
+      console.log(`Bookings are NOT OPEN for ${key} yet!`);
     }
   }
-  successAudio();
 }
 
 setInterval(() => {
